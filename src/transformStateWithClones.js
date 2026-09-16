@@ -16,8 +16,12 @@ function transformStateWithClones(state, actions) {
         for (const i in x.extraData) {
           stateCopy[i] = x.extraData[i];
         }
-        resultTable.push(stateCopy);
+
+        const newState = { ...stateCopy };
+
+        resultTable.push(newState);
       }
+      continue;
     }
 
     if (x.type === 'removeProperties') {
@@ -25,15 +29,23 @@ function transformStateWithClones(state, actions) {
         for (const i of x.keysToRemove) {
           delete stateCopy[i];
         }
-        resultTable.push(stateCopy);
+
+        const newState = { ...stateCopy };
+
+        resultTable.push(newState);
       }
+      continue;
     }
 
     if (x.type === 'clear') {
       for (const i in stateCopy) {
         delete stateCopy[i];
       }
-      resultTable.push(stateCopy);
+
+      const newState = { ...stateCopy };
+
+      resultTable.push(newState);
+      continue;
     }
   }
 
