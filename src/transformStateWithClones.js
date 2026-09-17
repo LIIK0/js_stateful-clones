@@ -11,47 +11,34 @@ function transformStateWithClones(state, actions) {
   const resultTable = [];
 
   for (const x of actions) {
+    let newState = {};
+
     switch (x.type) {
       case 'addProperties':
         if (x.extraData !== null) {
           for (const i in x.extraData) {
             stateCopy[i] = x.extraData[i];
           }
-
-          const newState = { ...stateCopy };
-
-          resultTable.push(newState);
         }
+        newState = { ...stateCopy };
         break;
-
       case 'removeProperties':
-        if (x.type === 'removeProperties') {
-          if (x.keysToRemove.length >= 0) {
-            for (const i of x.keysToRemove) {
-              delete stateCopy[i];
-            }
-
-            const newState = { ...stateCopy };
-
-            resultTable.push(newState);
-          }
+        for (const i of x.keysToRemove) {
+          delete stateCopy[i];
         }
+        newState = { ...stateCopy };
         break;
-
       case 'clear':
-        if (x.type === 'clear') {
-          for (const i in stateCopy) {
-            delete stateCopy[i];
-          }
-
-          const newState = { ...stateCopy };
-
-          resultTable.push(newState);
+        for (const element in stateCopy) {
+          delete stateCopy[element];
         }
+        newState = {};
         break;
       default:
         return 'Problem accured';
     }
+
+    resultTable.push(newState);
   }
 
   return resultTable;
